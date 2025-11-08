@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -37,20 +38,19 @@ public interface UserAuthApiDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")
     })
-    ResponseEntity<TokenResponse> refresh(String authorization, RefreshRequest body);
+    ResponseEntity<TokenResponse> refresh(@Parameter(hidden = true) String authorization, RefreshRequest body);
 
     @Operation(summary = "Logout", description = "액세스 토큰 블랙리스트 등록 후 로그아웃")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")
     })
     @SecurityRequirement(name = "bearerAuth")
-    ResponseEntity<Void> logout(String authorization);
+    ResponseEntity<Void> logout(@Parameter(hidden = true) String authorization);
 
     @Operation(summary = "Me", description = "현재 로그인한 사용자 정보")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = UserResponse.class)))
     })
     @SecurityRequirement(name = "bearerAuth")
-    ResponseEntity<UserResponse> me(Long userId);
+    ResponseEntity<UserResponse> me(@Parameter(hidden = true) Long userId);
 }
-
