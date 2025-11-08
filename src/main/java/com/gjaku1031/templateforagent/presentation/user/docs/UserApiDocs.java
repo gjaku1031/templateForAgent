@@ -25,37 +25,37 @@ public interface UserApiDocs {
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(schema = @Schema(implementation = UserCreateRequest.class),
             examples = @ExampleObject(name = "create-user", value = "{\\n  \\\"username\\\": \\\"newuser\\\",\\n  \\\"email\\\": \\\"newuser@example.com\\\"\\n}")))
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                schema = @Schema(type = "integer", format = "int64"),
-                examples = @ExampleObject(value = "1"))),
-        @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
+                    schema = @Schema(type = "integer", format = "int64"),
+                    examples = @ExampleObject(value = "1"))),
+            @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     ResponseEntity<Long> createUser(@org.springframework.web.bind.annotation.RequestBody UserCreateRequest request);
 
     @Operation(summary = "Get user by id")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = UserResponse.class))),
-        @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(schema = @Schema(implementation = UserResponse.class))),
+            @ApiResponse(responseCode = "404", description = "User not found", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
     ResponseEntity<UserResponse> getUser(@PathVariable("id") Long id);
 
     @Operation(summary = "Update user", description = "관리자 또는 본인만 가능")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(required = true, content = @Content(schema = @Schema(implementation = UserUpdateRequest.class)))
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK")
+            @ApiResponse(responseCode = "200", description = "OK")
     })
     ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @org.springframework.web.bind.annotation.RequestBody UserUpdateRequest request);
 
     @Operation(summary = "Delete user", description = "관리자 또는 본인만 가능")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK")
+            @ApiResponse(responseCode = "200", description = "OK")
     })
     ResponseEntity<Void> deleteUser(@PathVariable("id") Long id);
 
     @Operation(summary = "List users (paged)")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
-                examples = @ExampleObject(name = "users-page", value = "{\\n  \\\"content\\\": [], \\\"pageable\\\": { \\\"pageNumber\\\": 0, \\\"pageSize\\\": 20 }\\n}")))
+            @ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = "application/json",
+                    examples = @ExampleObject(name = "users-page", value = "{\\n  \\\"content\\\": [], \\\"pageable\\\": { \\\"pageNumber\\\": 0, \\\"pageSize\\\": 20 }\\n}")))
     })
     ResponseEntity<Page<UserResponse>> listUsers(@RequestParam(name = "page", defaultValue = "0") int page,
                                                  @RequestParam(name = "size", defaultValue = "20") int size);
