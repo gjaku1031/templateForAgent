@@ -32,9 +32,7 @@ public class JwtUtil {
             Claims claims = getClaims(token);
             if (claims.getExpiration().before(new Date())) return false;
             return jwtConfig.getIssuer().equals(claims.getIssuer());
-        } catch (ExpiredJwtException e) {
-            return false;
-        } catch (JwtException e) {
+        } catch (ExpiredJwtException | JwtException e) {
             return false;
         }
     }
@@ -80,3 +78,4 @@ public class JwtUtil {
         try { return getClaims(token).getExpiration().before(new Date()); } catch (Exception e) { return true; }
     }
 }
+
