@@ -19,4 +19,3 @@ public class QuerydslConfig {
         return new JPAQueryFactory(em);
     }
 }
-
