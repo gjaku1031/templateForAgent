@@ -16,6 +16,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Tag(name = "User", description = "User CRUD API")
 @SecurityRequirement(name = "bearerAuth")
@@ -30,7 +31,7 @@ public interface UserApiDocs {
                     examples = @ExampleObject(value = "1"))),
             @ApiResponse(responseCode = "400", description = "Invalid request", content = @Content(schema = @Schema(implementation = ErrorResponse.class)))
     })
-    ResponseEntity<Long> createUser(@org.springframework.web.bind.annotation.RequestBody UserCreateRequest request);
+    ResponseEntity<Long> createUser(@RequestBody UserCreateRequest request);
 
     @Operation(summary = "Get user by id")
     @ApiResponses({
@@ -44,7 +45,7 @@ public interface UserApiDocs {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK")
     })
-    ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @org.springframework.web.bind.annotation.RequestBody UserUpdateRequest request);
+    ResponseEntity<Void> updateUser(@PathVariable("id") Long id, @RequestBody UserUpdateRequest request);
 
     @Operation(summary = "Delete user", description = "관리자 또는 본인만 가능")
     @ApiResponses({
@@ -60,4 +61,3 @@ public interface UserApiDocs {
     ResponseEntity<Page<UserResponse>> listUsers(@RequestParam(name = "page", defaultValue = "0") int page,
                                                  @RequestParam(name = "size", defaultValue = "20") int size);
 }
-
