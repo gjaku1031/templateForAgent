@@ -2,6 +2,7 @@ package com.gjaku1031.templateforagent.presentation.board.docs;
 
 import com.gjaku1031.templateforagent.presentation.board.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ public interface BoardApiDocs {
     @Operation(summary = "Create board")
     @SecurityRequirement(name = "bearerAuth")
     ResponseEntity<Long> createBoard(@org.springframework.web.bind.annotation.RequestBody BoardCreateRequest request,
-                                     Long userId);
+                                     @Parameter(hidden = true) Long userId);
     @Operation(summary = "Get board by id")
     @SecurityRequirement(name = "bearerAuth")
     ResponseEntity<BoardResponse> getBoard(@PathVariable("id") Long id);
@@ -29,4 +30,3 @@ public interface BoardApiDocs {
                                                      @RequestParam(name = "page", defaultValue = "0") int page,
                                                      @RequestParam(name = "size", defaultValue = "20") int size);
 }
-
