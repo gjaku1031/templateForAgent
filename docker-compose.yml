@@ -1,0 +1,63 @@
+version: "3.9"
+
+# 변수 치환 규칙: ${VAR:-default}
+# - docker compose는 같은 디렉토리의 .env를 자동으로 읽고 치환합니다.
+# - VAR이 정의되어 있지 않으면 default가 사용됩니다.
+# 앱(Spring)에서 사용하는 표준 변수명(프로필 yml과 일치):
+#   POSTGRES_HOST, POSTGRES_PORT, POSTGRES_DB, POSTGRES_USER, POSTGRES_PASSWORD
+#   REDIS_HOST, REDIS_PORT
+# 로컬 호스트에서 앱을 실행할 경우 HOST는 보통 localhost를 사용합니다.
+
+services:
+  postgres:
+    # 경량 Postgres 이미지 사용
+    image: postgres:15-alpine
+    container_name: templateforagent-postgres
+    ports:
+      # 호스트포트:컨테이너포트 (호스트에서 DB에 접속하기 위해 5432 포트를 노출)
+      - "${POSTGRES_PORT:-5432}:5432"
+    environment:
+      # 초기 DB/계정 설정 (최초 실행 시에만 영향을 줍니다)
+      POSTGRES_DB: ${POSTGRES_DB:-templateforagent}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    volumes:
+      # 데이터 영속화(컨테이너 재시작/재생성해도 데이터 유지)
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      # DB가 준비되었는지 확인 (의존 서비스가 있을 때 유용)
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      org.springframework.boot.service-connection: postgresql
+
+  redis:
+    # 경량 Redis 이미지 사용
+    image: redis:7-alpine
+    container_name: templateforagent-redis
+    ports:
+      # 호스트포트:컨테이너포트 (호스트에서 redis-cli, 앱에서 localhost로 접속 시 필요)
+      - "${REDIS_PORT:-6379}:6379"
+    command: ["redis-server", "--appendonly", "yes"] # AOF 지속성 활성화
+    volumes:
+      # Redis 데이터 영속화
+      - redis-data:/data
+    healthcheck:
+      # Redis 준비 상태 확인
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    labels:
+      org.springframework.boot.service-connection: redis
+
+# 참고: 앱을 컨테이너로 띄우는 경우, 아래 호스트로 접속하세요.
+#   POSTGRES_HOST=postgres
+#   REDIS_HOST=redis
+
+volumes:
+  # 네임드 볼륨: 실제 데이터 파일을 호스트에 보관 → 컨테이너를 내려도 데이터 유지
+  postgres-data:
+  redis-data:
