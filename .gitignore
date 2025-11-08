@@ -35,3 +35,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Spring Boot application configs ###
+# 실제 환경설정(YAML)은 버전관리에서 제외
+src/main/resources/application.yml
+src/main/resources/application-*.yml
