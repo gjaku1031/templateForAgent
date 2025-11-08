@@ -92,10 +92,7 @@ public class UserController implements UserApiDocs, UserAuthApiDocs {
     @Override
     public ResponseEntity<Page<UserResponse>> listUsers(@RequestParam(name = "page", defaultValue = "0") int page, @RequestParam(name = "size", defaultValue = "20") int size) {
         var pageable = PageRequest.of(page, size);
-        var users = userService.list(pageable);
-        var responses = users.getContent().stream().map(UserResponse::from).collect(Collectors.toList());
-        var result = new PageImpl<>(responses, pageable, users.getTotalElements());
-        return ResponseEntity.ok(result);
+        return ResponseEntity.ok(userService.list(pageable));
     }
 
     @GetMapping("/me")
