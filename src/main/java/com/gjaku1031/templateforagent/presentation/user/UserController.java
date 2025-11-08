@@ -4,6 +4,7 @@ import com.gjaku1031.templateforagent.application.auth.AuthService;
 import com.gjaku1031.templateforagent.application.user.UserService;
 import com.gjaku1031.templateforagent.domain.user.User;
 import com.gjaku1031.templateforagent.presentation.common.annotation.*;
+import com.gjaku1031.templateforagent.presentation.common.annotation.CurrentUser;
 import com.gjaku1031.templateforagent.presentation.user.docs.UserApiDocs;
 import com.gjaku1031.templateforagent.presentation.user.docs.UserAuthApiDocs;
 import com.gjaku1031.templateforagent.presentation.user.dto.*;
@@ -99,9 +100,8 @@ public class UserController implements UserApiDocs, UserAuthApiDocs {
 
     @GetMapping("/me")
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<UserResponse> me(@com.gjaku1031.templateforagent.presentation.common.annotation.CurrentUser Long userId) {
+    public ResponseEntity<UserResponse> me(@CurrentUser Long userId) {
         User user = userService.get(userId);
         return ResponseEntity.ok(UserResponse.from(user));
     }
 }
-
