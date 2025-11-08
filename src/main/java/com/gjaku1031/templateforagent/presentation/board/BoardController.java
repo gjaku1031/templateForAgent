@@ -20,5 +20,13 @@ public class BoardController implements BoardApiDocs {
     @GetMapping("/{id}") @Override public ResponseEntity<BoardResponse> getBoard(@PathVariable("id") Long id){return ResponseEntity.ok(boardService.get(id));}
     @PutMapping("/{id}") @Override public ResponseEntity<Void> updateBoard(@PathVariable("id") Long id,@RequestBody @Valid BoardUpdateRequest request){boardService.update(id, request.getTitle(), request.getContent()); return ResponseEntity.ok().build();}
     @DeleteMapping("/{id}") @Override public ResponseEntity<Void> deleteBoard(@PathVariable("id") Long id){boardService.delete(id); return ResponseEntity.ok().build();}
-    @GetMapping @Override public ResponseEntity<Page<BoardResponse>> searchBoards(@RequestParam(name="keyword",required=false) String keyword,@RequestParam(name="page",defaultValue="0") int page,@RequestParam(name="size",defaultValue="20") int size){var pageable= PageRequest.of(page,size); var boards=boardService.search(keyword,pageable); var responses=boards.getContent().stream().map(BoardResponse::from).collect(Collectors.toList()); var result=new PageImpl<>(responses,pageable,boards.getTotalElements()); return ResponseEntity.ok(result);} }
-
+    @GetMapping
+    @Override
+    public ResponseEntity<Page<BoardResponse>> searchBoards(
+            @RequestParam(name = "keyword", required = false) String keyword,
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "20") int size) {
+        var pageable = PageRequest.of(page, size);
+        return ResponseEntity.ok(boardService.search(keyword, pageable));
+    }
+}
