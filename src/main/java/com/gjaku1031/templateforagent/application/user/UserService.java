@@ -67,8 +67,8 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    public Page<User> list(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<com.gjaku1031.templateforagent.presentation.user.dto.UserResponse> list(Pageable pageable) {
+        return userRepository.findAll(pageable)
+                .map(com.gjaku1031.templateforagent.presentation.user.dto.UserResponse::from);
     }
 }
-
