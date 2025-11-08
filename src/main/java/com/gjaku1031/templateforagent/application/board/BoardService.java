@@ -49,8 +49,9 @@ public class BoardService {
         boardRepository.delete(board);
     }
 
-    public Page<Board> search(String keyword, Pageable pageable) {
-        return boardRepository.search(keyword, pageable);
+    public Page<BoardResponse> search(String keyword, Pageable pageable) {
+        return boardRepository.search(keyword, pageable)
+                .map(BoardResponse::from);
     }
 
     private Board getEntity(Long id) {
@@ -58,4 +59,3 @@ public class BoardService {
             .orElseThrow(() -> new NotFoundException("Board not found"));
     }
 }
-
